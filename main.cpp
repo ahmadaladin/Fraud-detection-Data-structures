@@ -1,4 +1,4 @@
-// Enhanced main.cpp with Search by Device Used feature
+//main.cpp running the code.
 #include <iostream>
 #include <algorithm>
 #include <cctype>
@@ -356,7 +356,7 @@ void searchByDeviceUsed(const CustomDynamicArray<Transaction>& arr) {
                         exactMatches++;
                         found = true;
                     }
-                    // Partial match (contains the search term)
+                    // Partial match (contains the search terms)
                     else if (deviceValue.find(query) != std::string::npos) {
                         std::cout << "[PARTIAL] " << arr.get(i).transaction_id << " - " << arr.get(i).device_used << " - " << arr.get(i).amount << " - " << arr.get(i).location << "\n";
                         lastSearchResult.push_back(arr.get(i));
@@ -371,9 +371,9 @@ void searchByDeviceUsed(const CustomDynamicArray<Transaction>& arr) {
                 } else {
                     hasLastResult = true;
                     std::cout << "\n--- Search Summary ---\n";
-                    std::cout << "Exact matches: " << exactMatches << "\n";
-                    std::cout << "Partial matches: " << partialMatches << "\n";
-                    std::cout << "Total found: " << lastSearchResult.size() << " transactions\n";
+                    std::cout << "Exact matches : " << exactMatches << "\n";
+                    std::cout << "Partial matches : " << partialMatches << "\n";
+                    std::cout << "Total found  : " << lastSearchResult.size() << " transactions\n";
                 }
 
                 auto end = std::chrono::high_resolution_clock::now();
@@ -390,7 +390,8 @@ void searchByDeviceUsed(const CustomDynamicArray<Transaction>& arr) {
                 
                 auto start = std::chrono::high_resolution_clock::now();
                 
-                // Count occurrences of each device
+                // Count occurrences of each devices
+                //half
                 for (int i = 0; i < arr.size(); ++i) {
                     std::string device = trim(arr.get(i).device_used);
                     deviceCount[device]++;
@@ -408,7 +409,7 @@ void searchByDeviceUsed(const CustomDynamicArray<Transaction>& arr) {
                 }
                 
                 std::cout << "\nAnalysis time: " << duration.count() << " seconds\n";
-                std::cout << "💡 You can use any of these device types for custom search.\n";
+                std::cout << "💡 You can use any of these device types for  a custom search.\n";
                 pauseForUser();
                 break;
             }
@@ -434,7 +435,7 @@ void sortTransactions(CustomDynamicArray<Transaction>& arr, const CustomDynamicA
                 std::vector<Transaction> temp;
                 for (int i = 0; i < arr.size(); ++i) temp.push_back(arr.get(i));
                 
-                // Using merge sort for better performance on large datasets
+                // Using merge sort for better performance on large dataset
                 std::sort(temp.begin(), temp.end(), [](const Transaction& a, const Transaction& b) {
                     return toLower(trim(a.location)) < toLower(trim(b.location));
                 });
@@ -476,7 +477,7 @@ void filterLoop(const CustomDynamicArray<Transaction>& arr, const std::string& t
             continue;
         }
 
-        // Clear previous results
+        // Clear previous resultS
         lastSearchResult = CustomDynamicArray<Transaction>();
         hasLastResult = false;
 
