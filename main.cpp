@@ -606,7 +606,7 @@ void exportMenu(const CustomDynamicArray<Transaction>& fullArray) {
 
 // Statistics and fraud analysis
 void displayStatistics(const CustomDynamicArray<Transaction>& arr) {
-    std::cout << "\n--- Transaction Statistics ---\n";
+    std::cout << "\n--- Transaction Statistics ----\n";
     
     // Count fraud vs non-fraud
     int fraudCount = 0, nonFraudCount = 0;
@@ -643,14 +643,14 @@ void displayStatistics(const CustomDynamicArray<Transaction>& arr) {
     std::cout << "🚨 Fraudulent: " << fraudCount << " (" << std::fixed << std::setprecision(2) << (fraudCount * 100.0 / arr.size()) << "%)\n";
     std::cout << "✅ Non-fraudulent: " << nonFraudCount << " (" << std::fixed << std::setprecision(2) << (nonFraudCount * 100.0 / arr.size()) << "%)\n";
     
-    std::cout << "\n--- Top Transaction Types ---\n";
+    std::cout << "\n--- Top Transaction Types ----\n";
     for (const auto& pair : typeCount) {
-        std::cout << "• " << pair.first << ": " << pair.second << " transactions\n";
+        std::cout << "• " << pair.first << ": " << pair.second << " transactions \n";
     }
     
-    std::cout << "\n--- Top Locations ---\n";
+    std::cout << "\n---- Top Locations ----\n";
     for (const auto& pair : locationCount) {
-        std::cout << "• " << pair.first << ": " << pair.second << " transactions\n";
+        std::cout << "• " << pair.first << ": " << pair.second << " transactions \n";
     }
     
     std::cout << "\n--- Top Device Types ---\n";
@@ -658,135 +658,9 @@ void displayStatistics(const CustomDynamicArray<Transaction>& arr) {
         std::cout << "• " << pair.first << ": " << pair.second << " transactions\n";
     }
     
-    std::cout << "\nAnalysis time: " << duration.count() << " seconds\n";
+    std::cout << "\nAnalysis time: " << duration.count() << " seconds \n";
     pauseForUser();
 }
 
-// Benchmarking menu
-void benchmarkMenu(const CustomDynamicArray<Transaction>& arr) {
-    std::cout << "\n--- Performance Benchmarking ---\n";
-    std::cout << "Testing Array-based Data Structure Performance\n";
-    std::cout << "Dataset size: " << arr.size() << " transactions\n";
-    
-    // Test different operations
-    std::cout << "\n🔍 Linear Search Benchmark:\n";
-    auto start = std::chrono::high_resolution_clock::now();
-    int foundCount = 0;
-    for (int i = 0; i < arr.size(); ++i) {
-        if (toLower(trim(arr.get(i).transaction_type)) == "deposit") {
-            foundCount++;
-        }
-    }
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> searchDuration = end - start;
-    std::cout << "Linear search for 'deposit' transactions: " << searchDuration.count() << " seconds\n";
-    std::cout << "Found: " << foundCount << " transactions\n";
-    std::cout << "Time Complexity: O(n) - Linear search through array\n";
-    
-    std::cout << "\n📊 Data Access Benchmark:\n";
-    start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < std::min(1000, arr.size()); ++i) {
-        Transaction t = arr.get(i); // Random access
-    }
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> accessDuration = end - start;
-    std::cout << "Random access (1000 elements): " << accessDuration.count() << " seconds\n";
-    std::cout << "Time Complexity: O(1) - Direct array indexing\n";
-    
-    std::cout << "\n📈 Array Advantages:\n";
-    std::cout << "• O(1) random access by index\n";
-    std::cout << "• Cache-friendly memory layout\n";
-    std::cout << "• Lower memory overhead per element\n";
-    std::cout << "• Efficient for sorting algorithms\n";
-    
-    std::cout << "\n📉 Array Disadvantages:\n";
-    std::cout << "• O(n) insertion/deletion at arbitrary positions\n";
-    std::cout << "• Fixed memory allocation (dynamic resize needed)\n";
-    std::cout << "• Memory waste if not fully utilized\n";
-    
-    pauseForUser();
-}
 
-int main() {
-    CustomDynamicArray<Transaction> transactionArray;
-    std::string filename = "financial_fraud_detection_25k.csv";
-    
-    std::cout << "🔄 Loading transactions from CSV...\n";
-    loadFromCSV(filename, transactionArray);
-    std::cout << "\n✅ Loaded " << transactionArray.size() << " transactions into Dynamic Array.\n";
-    
-    if (transactionArray.size() == 0) {
-        std::cerr << "❌ Error: No transactions loaded.\n";
-        return 1;
-    }
 
-    CustomDynamicArray<Transaction> originalArray = transactionArray;
-
-    int choice;
-    do {
-        std::cout << "\n========= Financial Fraud Detection System =========\n";
-        std::cout << "Array-based Implementation | Dataset: " << transactionArray.size() << " transactions\n";
-        std::cout << "1. View all transactions\n";
-        std::cout << "2. Search by transaction type\n";
-        std::cout << "3. Sort transactions\n";
-        std::cout << "4. Filter by payment channel\n";
-        std::cout << "5. Search by location\n";  // Updated menu item
-        std::cout << "6. Filter by fraud status\n";
-        std::cout << "7. Export transactions\n";
-        std::cout << "8. View payment channel storage\n";
-        std::cout << "9. View statistics & fraud analysis\n";
-        std::cout << "10. Search by device used\n";
-        std::cout << "11. Performance benchmarking\n";
-        std::cout << "12. Exit\n";
-        std::cout << "Choose an option: ";
-        std::cin >> choice;
-        std::cin.ignore();
-
-        switch (choice) {
-            case 1:
-                displayAll(transactionArray);
-                break;
-            case 2:
-                searchByType(transactionArray);
-                break;
-            case 3:
-                sortTransactions(transactionArray, originalArray);
-                break;
-            case 4: {
-                std::string paymentOptions[] = {"card", "ACH", "UPI", "wire_transfer"};
-                filterLoop(transactionArray, "Payment Channel", paymentOptions, 4, &Transaction::payment_channel);
-                break;
-            }
-            case 5:
-                searchByLocation(transactionArray);
-                break;
-            case 6: {
-                std::string fraudStatuses[] = {"TRUE", "FALSE"};
-                filterLoop(transactionArray, "Fraud Status", fraudStatuses, 2, &Transaction::is_fraud);
-                break;
-            }
-            case 7:
-                exportMenu(transactionArray);
-                break;
-            case 8:
-                displayPaymentChannelBuckets();
-                break;
-            case 9:
-                displayStatistics(transactionArray);
-                break;
-            case 10:
-                searchByDeviceUsed(transactionArray);  // 👉 NEW CASE
-                break;
-            case 11:
-                benchmarkMenu(transactionArray);
-                break;
-            case 12:
-                std::cout << "👋 Exiting Financial Fraud Detection System.\n";
-                return 0;
-            default:
-                std::cout << "❌ Invalid option. Try again.\n";
-        }
-    } while (choice != 11);
-
-    return 0;
-}
